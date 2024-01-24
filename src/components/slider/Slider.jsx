@@ -88,7 +88,7 @@ const Slider = () => {
             <div className="imgs-container">
                 <img src={images[currentStep].image} alt={images[currentStep].label} />
 
-                <div className="button-container">
+                <div className="button-container controller-container">
                     <button className="controller" onClick={handleBack}><KeyboardArrowLeft /></button>
                     <button className="controller" onClick={handleNext}><KeyboardArrowRight /></button>
                 </div>

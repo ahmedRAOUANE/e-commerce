@@ -24,8 +24,13 @@ const list = localStorage.getItem('TOKEN') != null ? (
 )
 
 const Header = () => {
+    const [ActivePage, setActivePage] = useState(0);
     const [categoryList, setCategoryList] = useState([]);
     const { navCatigory } = useParams();
+
+    const handleActivePage = (page) => {
+        setActivePage(page)
+    }
 
     useEffect(() => {
         axiosClient.get('/products/categories')
@@ -56,7 +61,7 @@ const Header = () => {
                     <div className='input-container button-container'>
                         <select className='button icon search-by'>
                             {categoryList.map(category => (
-                                <option key={category} defaultValue={category === navCatigory && true} value={category}>{category}</option>
+                                <option key={category} selected={category === navCatigory && true} value={category}>{category}</option>
                             ))}
                         </select>
                         <div>
@@ -71,8 +76,8 @@ const Header = () => {
                     </div>
                 </div>
                 <ul className='navigation-bottom'>
-                    {["Home", ...categoryList, "Pages", "Contact"].map((link) => (
-                        <li key={link}>
+                    {["Home", ...categoryList, "Pages", "Contact"].map((link, idx) => (
+                        <li onClick={() => handleActivePage(idx)} className={idx === ActivePage ? "active" : ""} key={link}>
                             <Link to={`/${link === "Home" ? '' : link}`}>{link}</Link>
                         </li>
                     ))}

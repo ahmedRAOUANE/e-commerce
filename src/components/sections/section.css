@@ -1,4 +1,5 @@
 section {
+    position: relative;
     .section-title {
         padding-left: 10px;
         margin-bottom: 10px;

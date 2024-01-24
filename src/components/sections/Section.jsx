@@ -6,6 +6,7 @@ import Rating from "../helpers/Rating"
 // style
 import './section.css'
 import axiosClient from "../../axiosClient";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
 const Section = (props) => {
     const [products, setProducts] = useState([])
@@ -37,6 +38,10 @@ const Section = (props) => {
                         </Link>
                     ))}
                 </div>
+            </div>
+            <div className="button-container controller-container">
+                <button className="controller"><KeyboardArrowLeft /></button>
+                <button className="controller"><KeyboardArrowRight /></button>
             </div>
         </section>
     )

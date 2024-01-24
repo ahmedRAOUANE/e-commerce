@@ -44,8 +44,8 @@ input {
 
 img {
     max-width: 100%;
-    width: 100%;
     height: 100%;
+    float: right;
 }
 
 select:focus {
@@ -70,6 +70,9 @@ form {
 
 h1 {
     text-align: center;
+}
+h2 {
+    color: inherit;
 }
 
 .container {

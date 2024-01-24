@@ -44,25 +44,6 @@ const ProductDetailes = () => {
           <img src={product.image} alt="" />
         </div>
       </div>
-      <div className='scroller'>
-        <div className='cards-container'>
-          <div className='card backgrounded-card'>
-            <div className="card-img">
-              {/* <img src={product.img} alt={product.title} /> */}
-            </div>
-          </div>
-          <div className='card backgrounded-card'>
-            <div className="card-img">
-              {/* <img src={product.img} alt={product.title} /> */}
-            </div>
-          </div>
-          <div className='card backgrounded-card'>
-            <div className="card-img">
-              {/* <img src={product.img} alt={product.title} /> */}
-            </div>
-          </div>
-        </div>
-      </div>
       <div className='button-container'>
         <button className='button primary'>buy now</button>
         <button className='button secondary'>inbox</button>

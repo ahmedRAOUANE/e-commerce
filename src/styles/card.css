@@ -6,36 +6,37 @@
     position: relative;
     box-shadow: none;
     overflow: hidden;
-
+    
     &.backgrounded-card {
         cursor: default;
-
+        box-shadow: 0 0 0 .5px #000000ad;
+            border-radius: 6px;
+        
         .card-img {
             position: absolute;
             width: 100%;
             left: 0;
             top: 0;
             height: 100%;
-            background-color: var(--grey-color);
+            z-index: -1;
         }
-
+        
         .card-text {
-            position: absolute;
-            left: 33%;
-            top: 15%;
-            transform: translate(-50%);
-            font-size: 20px;
-            color: white;
-            text-align: start;
+            display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
 
             .card-title {
-                margin-bottom: 10px;
+                    margin-bottom: 10px;
+                        padding: 0 10px;
+                            font-size: 16px;
+                            margin-top: 20px;
             }
         }
 
         .card-actions {
             position: absolute;
-            left: 10%;
             top: 66%;
         }
     }
@@ -51,7 +52,6 @@
         height: 300px;
 
         .card-img {
-            background-color: var(--grey-color);
             height: 150px;
             width: 100%;
         }

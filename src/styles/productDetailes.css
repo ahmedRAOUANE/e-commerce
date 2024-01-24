@@ -4,7 +4,6 @@
     }
 
     .product-info {
-        height: 200px;
         display: flex;
         margin-bottom: 10px;
 
@@ -40,10 +39,6 @@
                         flex: 1;
                     }
                 }
-            }
-
-            &.img {
-                background-color: var(--grey-color);
             }
         }
     }
