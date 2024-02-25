@@ -1,0 +1,10 @@
+footer {
+    background-color: var(--grey-color);
+    padding: var(--primary-padding);
+    display: flex;
+    justify-content: center;
+
+    span {
+        color: var(--primary-color);
+    }
+}
