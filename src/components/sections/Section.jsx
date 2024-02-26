@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
+import axiosClient from "../../axiosClient";
 import { Link } from 'react-router-dom';
 
 // components
 import Rating from "../helpers/Rating"
-// style
-import './section.css'
-import axiosClient from "../../axiosClient";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
 const Section = (props) => {
     const [products, setProducts] = useState([])
@@ -20,7 +17,6 @@ const Section = (props) => {
     return (
         <section className={`container`}>
             <h2 className='section-title'>{props.sectionTitle}</h2>
-            <div className="scroller">
                 <div className="cards-container">
                     {products.map(product => (
                         <Link key={product.id} to={`products/${product.category}/${product.id}`} className="card product-card">
@@ -37,11 +33,6 @@ const Section = (props) => {
                             </div>
                         </Link>
                     ))}
-                </div>
-            </div>
-            <div className="button-container controller-container">
-                <button className="controller"><KeyboardArrowLeft /></button>
-                <button className="controller"><KeyboardArrowRight /></button>
             </div>
         </section>
     )

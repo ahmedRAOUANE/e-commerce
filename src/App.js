@@ -1,17 +1,39 @@
+import { useEffect } from "react";
+import axiosClient from "./axiosClient";
 import { Route, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategories } from "./features/categoriesSlice";
 
 // components
-import Header from "./components/header/Header";
-import HomePage from "./pages/HomePage";
-import Footer from "./components/footer/Footer";
+import Login from "./pages/Login";
 import Pages from "./pages/Pages";
 import Contact from "./pages/Contact";
-import ProductDetailes from "./pages/ProductDetailes";
-import Login from "./pages/Login";
+import HomePage from "./pages/HomePage";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+import ProductDetailes from "./pages/ProductDetailes";
+
+// styles
+import "./styles/card.css";
+import "./styles/index.css";
+import "./styles/layout.css";
+import "./styles/button.css";
 
 function App() {
+  const categoryList = useSelector((state) => state.categorySlice.categories);
+  const dispatch = useDispatch();
+
+  // get all categories
+  useEffect(() => {
+    if (!categoryList.length) {
+      axiosClient.get("/products/categories").then((response) => {
+        dispatch(setCategories(response.data));
+      });
+    }
+  });
+
   return (
     <div className="App">
       <Header />

@@ -24,9 +24,6 @@ header {
     .navigation-top,
     .navigation-center,
     .navigation-bottom {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         position: relative;
 
         @media(min-width: 768px) {
@@ -66,36 +63,12 @@ header {
         }
 
         &.navigation-center>div {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
 
             @media(max-width: 767px) {
                 margin-left: 20px;
             }
 
-            &.input-container {
-                background-color: white;
-                border-radius: 20px;
-                padding: 0 10px;
-
-                &>div {
-                    display: flex;
-                    align-items: center;
-                }
-
-                &>div input {
-                    padding: 10px;
-                }
-
-                @media(max-width: 767px) {
-
-                    & {
-                        display: none;
-                    }
-
-                }
-            }
+            
         }
 
         &.navigation-bottom {

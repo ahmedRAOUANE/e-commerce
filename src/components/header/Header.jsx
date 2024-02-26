@@ -1,13 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 // icons
 import SearchIcon from '@mui/icons-material/Search';
 import InboxIcon from '@mui/icons-material/Inbox';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 
+// components
+import Popup from '../helpers/Popup';
+import Search from '../helpers/Search';
+import NavList from '../helpers/NavList';
+
+// style
 import './header.css';
-import axiosClient from '../../axiosClient';
+
+// icons
+import MenuIcon from '@mui/icons-material/Menu';
+import { setIsOpen, setType } from '../../features/popupSlice';
 
 const list = localStorage.getItem('TOKEN') != null ? (
     ["My cart", "check out", "logout"].map((link) => (
@@ -24,26 +34,23 @@ const list = localStorage.getItem('TOKEN') != null ? (
 )
 
 const Header = () => {
-    const [ActivePage, setActivePage] = useState(0);
-    const [categoryList, setCategoryList] = useState([]);
-    const { navCatigory } = useParams();
+    const dispatch = useDispatch();
+    const categoryList = useSelector(state => state.categorySlice.categories);
 
-    const handleActivePage = (page) => {
-        setActivePage(page)
+    // popup states
+    const isOpen = useSelector(state => state.popupSlice.isOpen)
+    const popupType = useSelector(state => state.popupSlice.type)
+
+    const openPopup = (type) => {
+        dispatch(setIsOpen(!isOpen));
+        dispatch(setType(type));
     }
-
-    useEffect(() => {
-        axiosClient.get('/products/categories')
-            .then(response => {
-                setCategoryList(response.data);
-            })
-    })
 
     return (
         <header>
             <div className='container'>
-                <div className='navigation-top'>
-                    <div className='button-container'>
+                <div className='navigation-top hidden-in-small box'>
+                    <div className='box'>
                         <button className='icon'>$USD</button>
                         <select className='button icon'>
                             <option value="english">english</option>
@@ -54,34 +61,24 @@ const Header = () => {
                         {list}
                     </ul>
                 </div>
-                <div className='navigation-center'>
+                <div className='navigation-center box'>
                     <div>
-                        <h2><Link to='/'>Logo</Link></h2>
+                        <h2 className='box'>
+                            <button onClick={() => openPopup('list-nav')} className='hidden-from-medium icon'><MenuIcon /></button>
+                            <Link to='/'>AStore</Link>
+                        </h2>
                     </div>
-                    <div className='input-container button-container'>
-                        <select className='button icon search-by'>
-                            {categoryList.map(category => (
-                                <option key={category} selected={category === navCatigory && true} value={category}>{category}</option>
-                            ))}
-                        </select>
-                        <div>
-                            <input className='text' placeholder='search' />
-                            <SearchIcon />
-                        </div>
-                    </div>
-                    <div className='button-container'>
-                        <button className='search-btn icon'><SearchIcon /></button>
-                        <Link to='/inbox' className='button icon'><InboxIcon /></Link>
-                        <Link to='/help' className='button icon'><HeadsetMicIcon /></Link>
+                    <button onClick={() => openPopup('window-search')} className='icon simple hidden-in-small'>
+                        <Search categoryList={categoryList} />
+                    </button>
+                    <div className='box'>
+                        <button onClick={() => openPopup('window-search')} className='search-btn icon hidden-from-medium'><SearchIcon /></button>
+                        <button onClick={() => openPopup('window-inbox')} className='icon'><InboxIcon /></button>
+                        <button onClick={() => openPopup('window-help')} className='button icon'><HeadsetMicIcon /></button>
                     </div>
                 </div>
-                <ul className='navigation-bottom'>
-                    {["Home", ...categoryList, "Pages", "Contact"].map((link, idx) => (
-                        <li onClick={() => handleActivePage(idx)} className={idx === ActivePage ? "active" : ""} key={link}>
-                            <Link to={`/${link === "Home" ? '' : link}`}>{link}</Link>
-                        </li>
-                    ))}
-                </ul>
+                <NavList className={'hidden-in-small box'} />
+                <Popup isOpen={isOpen} requestClose={openPopup} type={popupType} />
             </div>
         </header>
     )

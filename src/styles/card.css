@@ -42,13 +42,14 @@
     }
 
     &.product-card {
+        flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         box-shadow: var(--box-shadow);
         color: black;
         border-radius: 10px;
-        width: 200px;
+        min-width: 200px;
         height: 300px;
 
         .card-img {

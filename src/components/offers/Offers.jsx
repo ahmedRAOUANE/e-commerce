@@ -21,7 +21,7 @@ const Offers = () => {
     return (
         <div className="container offers cards-container">
             {products.map(product => (
-                <div key={product.id} id={product.id} className='card backgrounded-card'>
+                <div key={product.id} id={product.id} className='card backgrounded-card hidden-in-small'>
                     <div className="card-img">
                         <img src={product.image} alt={product.title} />
                     </div>

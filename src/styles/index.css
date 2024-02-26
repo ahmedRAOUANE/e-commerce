@@ -75,33 +75,6 @@ h2 {
     color: inherit;
 }
 
-.container {
-    margin: 10px auto;
-
-    @media(min-width: 768px) {
-        margin: 10px 10%;
-    }
-
-    @media(min-width: 991px) {
-        margin: 10px 15%;
-    }
-}
-
-.cards-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding-bottom: 10px;
-    padding-top: 1px;
-    width: fit-content;
-}
-
-.scroller {
-    overflow: scroll;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 ::-webkit-scrollbar {
     display: none;
 }

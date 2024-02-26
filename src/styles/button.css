@@ -24,6 +24,7 @@ button,
     display: flex;
     align-items: center;
     justify-content: center;
+    color: inherit;
 
     &.primary {
         color: white;
@@ -69,13 +70,13 @@ button,
             background-color: rgb(69 69 69 / 35%);
             transform: scale(1.1);
         }
-    }
 
-    @media(min-width: 767px) {
-
-        &.search-btn {
-            display: none;
+        .simple {
+            box-shadow: none;
         }
 
+        .transparent {
+            background-color: transparent;
+        }
     }
 }
