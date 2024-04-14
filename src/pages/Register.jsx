@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import axiosClient from '../axiosClient';
+import axios from 'axios';
 
 const Register = () => {
     const emailRef = useRef();
@@ -7,35 +8,38 @@ const Register = () => {
     const lastNameRef = useRef();
     const passworsRef = useRef();
 
-    const subnitHandler = (e) => {
+    const registerHandler = async (e) => {
         e.preventDefault();
 
         const payload = {
             email: emailRef.current.value,
             password: passworsRef.current.value,
-            firstName: firstNameRef.current.value,
-            lastName: lastNameRef.current.value
+            username: firstNameRef.current.value,
+            name: {
+                firstname: firstNameRef.current.value,
+                lastname: lastNameRef.current.value
+            }
         }
 
         console.log(payload);
 
-        axiosClient.post('/users', payload, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                console.log(response);
+        try {
+            fetch('https://fakestoreapi.com/users', {
+                method: "POST",
+                body: JSON.stringify(payload)
             })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(res => res.json())
+                .then(json => console.log(json))
+        } catch (err) {
+            console.log("ERROR is: ", err);
+        }
     }
+
     return (
         <div className='container'>
             <h1>Register</h1>
 
-            <form onSubmit={subnitHandler} className='card product-card'>
+            <form onSubmit={registerHandler} className='card product-card'>
                 <input ref={emailRef} type="emial" placeholder='Emal address' />
                 <input ref={firstNameRef} type="text" placeholder='First Name' />
                 <input ref={lastNameRef} type="text" placeholder='Last Name' />

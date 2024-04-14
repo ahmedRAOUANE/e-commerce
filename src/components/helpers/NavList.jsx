@@ -9,6 +9,7 @@ const NavList = ({ className }) => {
     const handleActivePage = (page) => {
         setActivePage(page)
     }
+
     return (
         <ul className={`navigation-bottom ${className}`}>
             {["Home", ...categoryList, "Pages", "Contact"].map((link, idx) => (
