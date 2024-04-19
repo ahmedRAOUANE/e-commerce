@@ -41,7 +41,8 @@ const AddProducts = () => {
 
   const editProduct = (id) => {
     openPopup();
-    console.log("product id: ", id);
+    const target = privetProducts.find(product => product.id === id)
+    console.log("target products: ", target);
   }
 
   return (
