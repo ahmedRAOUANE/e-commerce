@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axiosClient from "../../axiosClient";
 import { Link } from 'react-router-dom';
 
 // components
@@ -7,12 +6,6 @@ import Rating from "../helpers/Rating"
 
 const Section = (props) => {
     const [products, setProducts] = useState([])
-    useEffect(() => {
-        axiosClient.get(`products/category/${props.category}`)
-            .then(response => {
-                setProducts(response.data);
-            })
-    }, [props.category])
 
     return (
         <section className={`container`}>

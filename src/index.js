@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./features";
+import store from "./store";
 
 // styles
-import "./styles/index.css";
 import "./styles/button.css";
+import "./styles/index.css";
 import "./styles/card.css";
 
 

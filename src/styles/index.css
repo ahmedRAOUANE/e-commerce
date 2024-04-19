@@ -12,7 +12,6 @@
 :root {
     --primary-color: #009688;
     --secondary-color: #FFC107;
-
     --grey-color: #aedadf;
 
     --primary-padding: .5em 1.5em;
@@ -36,6 +35,8 @@ ul {
 input {
     border: none;
     background-color: transparent;
+    width: 100%;
+    font-size: 20px;
 
     &:focus {
         outline: none;

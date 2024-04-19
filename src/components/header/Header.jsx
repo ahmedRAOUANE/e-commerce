@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // icons
@@ -17,33 +17,33 @@ import './header.css';
 
 // icons
 import MenuIcon from '@mui/icons-material/Menu';
-import { setIsOpen, setType } from '../../features/popupSlice';
+import { setIsOpen, setType } from '../../store/popupSlice';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 
-const list = localStorage.getItem('TOKEN') != null ? (
-    ["My cart", "check out", "logout"].map((link) => (
-        <li key={link}>
-            <Link to={`/${link}`}>{link}</Link>
-        </li>
-    ))
-) : (
-    ["login", "register"].map((link) => (
-        <li key={link}>
-            <Link to={`/${link}`}>{link}</Link>
-        </li>
-    ))
-)
 
 const Header = () => {
-    const dispatch = useDispatch();
+    const user = useSelector(state => state.userSlice.user);
+    const isOpen = useSelector(state => state.popupSlice.isOpen);
     const categoryList = useSelector(state => state.categorySlice.categories);
 
-    // popup states
-    const isOpen = useSelector(state => state.popupSlice.isOpen)
-    const popupType = useSelector(state => state.popupSlice.type)
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const openPopup = (type) => {
-        dispatch(setIsOpen(!isOpen));
         dispatch(setType(type));
+        dispatch(setIsOpen(!isOpen));
+    }
+
+    const handleAction = async (action) => {
+        if (action === "logout") {
+            await signOut(auth).then(() => {
+                navigate("/")
+            });
+        } else {
+            navigate(action);
+        }
     }
 
     return (
@@ -58,7 +58,21 @@ const Header = () => {
                         </select>
                     </div>
                     <ul>
-                        {list}
+                        {
+                            user ? (
+                                ["My cart", "check out", "logout"].map((link) => (
+                                    <li key={link} onClick={() => handleAction(link)}>
+                                        <Link to={`/${link}`}>{link}</Link>
+                                    </li>
+                                ))
+                            ) : (
+                                ["login", "register"].map((link) => (
+                                    <li key={link}>
+                                        <Link to={`/${link}`}>{link}</Link>
+                                    </li>
+                                ))
+                            )
+                        }
                     </ul>
                 </div>
                 <div className='navigation-center box'>
@@ -71,14 +85,15 @@ const Header = () => {
                     <button onClick={() => openPopup('window-search')} className='icon simple hidden-in-small'>
                         <Search categoryList={categoryList} />
                     </button>
-                    <div className='box'>
+                    <div className='button-container box'>
                         <button onClick={() => openPopup('window-search')} className='search-btn icon hidden-from-medium'><SearchIcon /></button>
                         <button onClick={() => openPopup('window-inbox')} className='icon'><InboxIcon /></button>
                         <button onClick={() => openPopup('window-help')} className='button icon'><HeadsetMicIcon /></button>
                     </div>
                 </div>
-                <NavList className={'hidden-in-small box'} />
-                <Popup isOpen={isOpen} requestClose={openPopup} type={popupType} />
+                <div className="box">
+                    <NavList className={'hidden-in-small box'} />
+                </div>
             </div>
         </header>
     )

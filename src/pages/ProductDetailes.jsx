@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 
 
 // styles
-import "../styles/productDetailes.css"
-import axiosClient from '../axiosClient';
+import "../styles/productDetailes.css";
 
 const ProductDetailes = () => {
   const [product, setProduct] = useState({
@@ -21,13 +20,6 @@ const ProductDetailes = () => {
   });
 
   const { id } = useParams();
-
-  useEffect(() => {
-    axiosClient.get(`/products/${id}`)
-      .then(response => {
-        setProduct(response.data);
-      })
-  }, [id])
 
   return (
     <div className='container product-container'>

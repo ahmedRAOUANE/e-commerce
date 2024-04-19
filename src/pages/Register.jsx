@@ -1,8 +1,12 @@
-import React, { useRef } from 'react'
-import axiosClient from '../axiosClient';
-import axios from 'axios';
+import { doc } from 'firebase/firestore';
+import React, { useRef, useState } from 'react';
+import { auth, db } from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const Register = () => {
+
+    const [currentPage, setCurrentPage] = useState(0);
+
     const emailRef = useRef();
     const firstNameRef = useRef();
     const lastNameRef = useRef();
@@ -11,27 +15,27 @@ const Register = () => {
     const registerHandler = async (e) => {
         e.preventDefault();
 
-        const payload = {
+        setCurrentPage(1)
+
+        const userCredintials = {
             email: emailRef.current.value,
             password: passworsRef.current.value,
-            username: firstNameRef.current.value,
+            username: `${firstNameRef.current.value} ${lastNameRef.current.value}`,
             name: {
                 firstname: firstNameRef.current.value,
                 lastname: lastNameRef.current.value
             }
         }
 
-        console.log(payload);
-
         try {
-            fetch('https://fakestoreapi.com/users', {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-                .then(res => res.json())
-                .then(json => console.log(json))
+            await createUserWithEmailAndPassword(auth, userCredintials.email, userCredintials.password)
+                .then(res => {
+                    updateProfile(res.user, {
+                        displayName: userCredintials.username
+                    })
+                })
         } catch (err) {
-            console.log("ERROR is: ", err);
+            console.log("Error: ", err);
         }
     }
 
@@ -39,14 +43,16 @@ const Register = () => {
         <div className='container'>
             <h1>Register</h1>
 
-            <form onSubmit={registerHandler} className='card product-card'>
-                <input ref={emailRef} type="emial" placeholder='Emal address' />
-                <input ref={firstNameRef} type="text" placeholder='First Name' />
-                <input ref={lastNameRef} type="text" placeholder='Last Name' />
-                <input ref={passworsRef} type="password" placeholder='Password' />
+            <div className='form-container'>
+                <form onSubmit={registerHandler} className='card product-card'>
+                    <input ref={emailRef} type="emial" placeholder='Emal address' />
+                    <input ref={firstNameRef} type="text" placeholder='First Name' />
+                    <input ref={lastNameRef} type="text" placeholder='Last Name' />
+                    <input ref={passworsRef} type="password" placeholder='Password' />
 
-                <button type='submit'>register</button>
-            </form>
+                    <input type='submit' className='button' value={"submit"} />
+                </form>
+            </div>
         </div>
     )
 }

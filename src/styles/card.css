@@ -6,12 +6,13 @@
     position: relative;
     box-shadow: none;
     overflow: hidden;
-    
+    padding: 20px;
+
     &.backgrounded-card {
         cursor: default;
         box-shadow: 0 0 0 .5px #000000ad;
-            border-radius: 6px;
-        
+        border-radius: 6px;
+
         .card-img {
             position: absolute;
             width: 100%;
@@ -20,18 +21,18 @@
             height: 100%;
             z-index: -1;
         }
-        
+
         .card-text {
             display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
 
             .card-title {
-                    margin-bottom: 10px;
-                        padding: 0 10px;
-                            font-size: 16px;
-                            margin-top: 20px;
+                margin-bottom: 10px;
+                padding: 0 10px;
+                font-size: 16px;
+                margin-top: 20px;
             }
         }
 
@@ -43,33 +44,39 @@
 
     &.product-card {
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         box-shadow: var(--box-shadow);
         color: black;
         border-radius: 10px;
         min-width: 200px;
-        height: 300px;
+        padding: 0;
+        max-width: 300px;
+        height: 350px;
 
         .card-img {
             height: 150px;
             width: 100%;
         }
 
-        .card-text,
-        .card-info {
-            padding: 5px 10px;
+        .card-body {
+            padding: 20px;
+            padding-top: 0;
+            flex: 1;
 
-            &.card-text {
-                .card-title {
-                    margin-bottom: 10px;
+            .card-text,
+            .card-info {
+                padding: 5px 10px;
+                flex: 1;
+
+                &.card-text {
+                    .card-title {
+                        margin-bottom: 10px;
+                    }
                 }
-            }
 
-            &.card-info {
-                display: flex;
-                justify-content: space-between;
+                &.card-info {
+                    display: flex;
+                    justify-content: space-between;
+                }
             }
         }
     }

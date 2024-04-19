@@ -3,20 +3,10 @@ import React, { useEffect, useState } from 'react';
 // style
 import './offers.css';
 import { Link } from 'react-router-dom';
-import axiosClient from '../../axiosClient';
 
 const Offers = () => {
 
     const [products, setProducts] = useState([])
-
-    useEffect(() => {
-        axiosClient.get('/products?limit=3')
-            .then(response => {
-                setProducts(response.data)
-            }).catch(err => {
-                console.log(err);
-            })
-    }, [])
 
     return (
         <div className="container offers cards-container">
