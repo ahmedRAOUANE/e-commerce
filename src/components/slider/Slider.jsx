@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import axiosClient from '../../axiosClient';
 
 // icons
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -62,15 +61,6 @@ const Slider = () => {
     const handleStepChange = (step) => {
         setCurrentStep(step)
     };
-
-    useEffect(() => {
-        axiosClient.get('/products?limit=4')
-            .then(response => {
-                setImages(response.data)
-            }).catch(err => {
-                console.log(err);
-            })
-    }, [])
 
     useEffect(() => {
         const timer = setInterval(handleNext, 3000);

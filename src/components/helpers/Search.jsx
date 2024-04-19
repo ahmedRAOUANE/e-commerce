@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axiosClient from '../../axiosClient';
-import { setFilteredData } from '../../features/searchSlice';
+import { setFilteredData } from '../../store/searchSlice';
 
 // icons 
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,19 +10,6 @@ const Search = ({className}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const categories = useSelector(state => state.categorySlice.categories);
     const [selectedCategory, setSelectedCategory] = useState('electronics');
-
-    useEffect(() => {
-        const getProductsByCategory = async () => {
-            axiosClient.get(`/products/category/${selectedCategory}`)
-                .then(async (res) => {
-                    const data = await res.data.filter(product => product.title.includes(searchTerm));
-                    dispatch(setFilteredData(data));
-                })
-        }
-
-        const timer = setTimeout(getProductsByCategory, 500);
-        return () => clearTimeout(timer);
-    }, [selectedCategory, searchTerm, categories, dispatch]);
 
     return (
         <div className={`box input-container ${className}`}>

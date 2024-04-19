@@ -1,48 +1,58 @@
-import React, { useRef } from 'react'
-import axiosClient from '../axiosClient';
+import { doc } from 'firebase/firestore';
+import React, { useRef, useState } from 'react';
+import { auth, db } from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const Register = () => {
+
+    const [currentPage, setCurrentPage] = useState(0);
+
     const emailRef = useRef();
     const firstNameRef = useRef();
     const lastNameRef = useRef();
     const passworsRef = useRef();
 
-    const subnitHandler = (e) => {
+    const registerHandler = async (e) => {
         e.preventDefault();
 
-        const payload = {
+        setCurrentPage(1)
+
+        const userCredintials = {
             email: emailRef.current.value,
             password: passworsRef.current.value,
-            firstName: firstNameRef.current.value,
-            lastName: lastNameRef.current.value
+            username: `${firstNameRef.current.value} ${lastNameRef.current.value}`,
+            name: {
+                firstname: firstNameRef.current.value,
+                lastname: lastNameRef.current.value
+            }
         }
 
-        console.log(payload);
-
-        axiosClient.post('/users', payload, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        try {
+            await createUserWithEmailAndPassword(auth, userCredintials.email, userCredintials.password)
+                .then(res => {
+                    updateProfile(res.user, {
+                        displayName: userCredintials.username
+                    })
+                })
+        } catch (err) {
+            console.log("Error: ", err);
+        }
     }
+
     return (
         <div className='container'>
             <h1>Register</h1>
 
-            <form onSubmit={subnitHandler} className='card product-card'>
-                <input ref={emailRef} type="emial" placeholder='Emal address' />
-                <input ref={firstNameRef} type="text" placeholder='First Name' />
-                <input ref={lastNameRef} type="text" placeholder='Last Name' />
-                <input ref={passworsRef} type="password" placeholder='Password' />
+            <div className='form-container'>
+                <form onSubmit={registerHandler} className='card product-card'>
+                    <input ref={emailRef} type="emial" placeholder='Emal address' />
+                    <input ref={firstNameRef} type="text" placeholder='First Name' />
+                    <input ref={lastNameRef} type="text" placeholder='Last Name' />
+                    <input ref={passworsRef} type="password" placeholder='Password' />
 
-                <button type='submit'>register</button>
-            </form>
+                    <input type='submit' className='button' value={"submit"} />
+                </form>
+            </div>
         </div>
     )
 }
