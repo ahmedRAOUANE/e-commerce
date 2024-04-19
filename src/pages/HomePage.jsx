@@ -1,27 +1,41 @@
+import { useSelector } from 'react-redux'
 import React, { useEffect, useState } from 'react'
 
 // components
 import Slider from '../components/slider/Slider'
 import Offers from '../components/offers/Offers'
 import Section from '../components/sections/Section'
-import axiosClient from '../axiosClient'
 
 const HomePage = () => {
+    const user = useSelector((state) => state.userSlice.user);
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        axiosClient.get("/products/categories").then(response => {
-            setCategories(response.data);
-        })
-    }, [])
+        if (!user) {
+            // then get data from fakestore api
+
+
+        }
+    }, [user])
 
     return (
         <main>
-            <Slider />
-            <Offers />
-            {categories.map(category => (
-                <Section key={category} category={category} sectionTitle={category} />
-            ))}
+            {user ? (
+                <>
+                    <Slider />
+                    <Offers />
+                    {categories.map(category => (
+                        <Section key={category} category={category} sectionTitle={category} />
+                    ))}
+                </>
+            ) : (
+                <div>
+                    <h1>
+                        you have no data
+                    </h1>
+                    <p className='text-center'>login or register first and add some products</p>
+                </div>
+            )}
         </main>
     )
 }

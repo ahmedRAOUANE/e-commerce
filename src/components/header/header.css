@@ -62,13 +62,8 @@ header {
             }
         }
 
-        &.navigation-center>div {
-
-            @media(max-width: 767px) {
-                margin-left: 20px;
-            }
-
-            
+        &.navigation-center {
+            padding: 0 10px;
         }
 
         &.navigation-bottom {
@@ -78,18 +73,18 @@ header {
 
             & li {
                 margin-right: 15px;
-                    position: relative;
-                    cursor: pointer;
-                
-                    &.active::after {
-                        content: "";
-                        position: absolute;
-                        bottom: -10px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        border: 10px solid;
-                        border-color: transparent transparent var(--secondary-color) transparent;
-                    }
+                position: relative;
+                cursor: pointer;
+
+                &.active::after {
+                    content: "";
+                    position: absolute;
+                    bottom: -10px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border: 10px solid;
+                    border-color: transparent transparent var(--secondary-color) transparent;
+                }
             }
 
             & li a {
