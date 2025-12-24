@@ -3,6 +3,23 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Hero Color Scheme */
+    --primary-blue: #2563eb;
+    /* blue-600 */
+    --primary-purple: #9333ea;
+    /* purple-600 */
+    --primary-pink: #db2777;
+    /* pink-600 */
+    --accent-yellow: #fde047;
+    /* yellow-300 */
+    --accent-pink: #f9a8d4;
+    /* pink-300 */
+    --accent-green: #4ade80;
+    /* green-400 */
+    --purple-light: #a855f7;
+    /* purple-500 */
+    --pink-light: #ec4899;
+    /* pink-500 */
 }
 
 @theme inline {
@@ -10,6 +27,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Hero gradient colors */
+    --color-primary-blue: var(--primary-blue);
+    --color-primary-purple: var(--primary-purple);
+    --color-primary-pink: var(--primary-pink);
+    --color-accent-yellow: var(--accent-yellow);
+    --color-accent-pink: var(--accent-pink);
+    --color-accent-green: var(--accent-green);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +47,131 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  --webkit-scrollbar-visibility: hidden
+}
+
+button {
+  cursor: pointer;
+}
+
+.admin-vew-height { 
+  height: calc(100vh - 4.5rem);
+}
+
+/* Mobile Menu Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.animate-slide-in-top {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.3s ease-out;
+}
+
+/* Animation delays */
+.animate-delay-75 {
+  animation-delay: 0.075s;
+}
+
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-150 {
+  animation-delay: 0.15s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-fill-both {
+  animation-fill-mode: both;
 }
