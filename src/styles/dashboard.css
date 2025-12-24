@@ -1,0 +1,35 @@
+.dashboard {
+    .info-holder {
+        margin: auto;
+
+        .profile-photo {
+            border: 1px solid black;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+        }
+
+        h2 {}
+    }
+
+    .options-holder {
+        flex: 1;
+        justify-content: flex-end;
+        max-width: 100%;
+
+        ul {
+            width: 600px;
+
+            .card {
+                cursor: pointer;
+                flex: 1;
+                width: 260px;
+                height: 130px;
+                
+                .card-title {}
+
+                .card-body {}
+            }
+        }
+    }
+}
