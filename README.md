@@ -4,7 +4,7 @@ A Next.js app (App Router) implementing the UI for an e-commerce store. This rep
 
 ---
 
-## 1️⃣ Project Overview
+## 1️ Project Overview
 
 ### 1.1 Project Idea
 
@@ -24,7 +24,7 @@ A UI-first e-commerce template built with Next.js (App Router). This repository 
 
 ---
 
-## 2️⃣ Tech Stack
+## 2️ Tech Stack
 
 ### 2.1 Frontend
 
@@ -46,7 +46,7 @@ A UI-first e-commerce template built with Next.js (App Router). This repository 
 
 ---
 
-## 3️⃣ Architecture
+## 3️ Architecture
 
 ### 3.1 Architectural Style
 
@@ -67,7 +67,7 @@ A UI-first e-commerce template built with Next.js (App Router). This repository 
 
 ---
 
-## 4️⃣ Project Structure
+## 4️ Project Structure
 
 ```
 root/
@@ -89,26 +89,23 @@ root/
 
 * **app/**: Routing, layouts, and pages
 * **components/**: Reusable UI components
-* **hooks/**: Custom React hooks
-* **services/**: API and external service logic
-* **store/**: Global state management (Redux, Zustand, etc.)
 * **lib/**: Utilities and helper functions
 * **types/**: Shared TypeScript types
 
 ---
 
-## 5️⃣ Data Flow
+## 5️ Data Flow
 
 ### 5.1 Data Fetching
 
 * Server Actions
-* Fetch / Axios
+* Fetch
 * SSR, SSG, and ISR strategies
 
 ### 5.2 State Management
 
+* Url state transfer
 * Local component state
-* Global application state
 
 ### 5.3 Persistence & Storage
 
@@ -118,7 +115,7 @@ root/
 
 ---
 
-## 6️⃣ User Experience (UX/UI)
+## 6️ User Experience (UX/UI)
 
 ### 6.1 Design Principles
 
@@ -133,15 +130,6 @@ root/
 
 ---
 
-## 7️⃣ Security
-
-* Authentication strategy
-* Authorization (roles & permissions)
-* API protection
-* Environment variable management
-
----
-
 ## 8️⃣ Performance Optimization
 
 * Server-Side Rendering (SSR)
@@ -151,50 +139,5 @@ root/
 
 ---
 
-## 9️⃣ Testing Strategy
-
-* Unit testing
-* Integration testing
-* Manual and exploratory testing
-
----
-
-## 🔮 10️⃣ Future Plans (Roadmap)
-
-### 10.1 Short-Term Improvements
-
-* UI/UX refinements
-* Performance optimizations
-
-### 10.2 Planned Features
-
-* Role-based access control
-* Advanced dashboard
-* Notifications system
-
-### 10.3 Long-Term Vision
-
-* Multi-language support
-* SaaS transformation
-* Scalability improvements
-
----
-
-## 11️⃣ Developer Notes
-
-* Important technical decisions
-* Trade-offs and alternatives considered
-* Challenges faced and solutions applied
-
----
-
-## 12️⃣ Changelog
-
-| Version | Date | Description           |
-| ------- | ---- | --------------------- |
-| 0.1.0   |      | Initial project setup |
-
----
-
-📌 **Note:**
+**Note:**
 This document should be updated regularly to reflect the current state of the project and serve as a clear technical reference.
