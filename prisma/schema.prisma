@@ -36,18 +36,11 @@ model Product {
   categoryId Int
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict) 
 
-  craetedAt DateTime @default(now())
-  upudatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([categoryId])
 }
-
-// model ProductImgs {
-//   id Int @id @unique @default(autoincrement())
-//   link String
-//   productId Int
-//   for Product @relation(fields: [productId], references: [id])
-// }
 
 model Category {
   id Int @id @default(autoincrement())
@@ -57,5 +50,6 @@ model Category {
 
   metadata Json? // TODO: the metadata is optional for this version, might be required for future versions
 
-  craetedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
