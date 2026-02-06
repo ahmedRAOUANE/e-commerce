@@ -25,27 +25,79 @@ enum ProductStatus {
 
 model Product {
   id Int @id @default(autoincrement())
+  
   name String
   description String
+  
   price Int
   discount Int @default(0)
-  imgs Json // TODO: this type is not strict, it can hold any type of data, add validation layer befor posting
-  status ProductStatus @default(DRAFT)
   salesCount Int @default(0)
 
+  status ProductStatus @default(DRAFT)
+
+  // TODO: these types are not strict, it can hold any type of data, add validation layer befor posting
+  imgs Json 
+  /*
+    imgs: {
+      alt: string,
+      url: string
+    }[]
+  */
+  
+  tags Json? // String[]
+  inventory Json 
+  /*
+    inventory: {
+      sku: string,
+      barcode: string,
+      quantity: number
+    }
+  */
+
+  shipping Json 
+  /*
+    shipping: {
+      weight: number,
+      length: number,
+      width: number,
+      height: number,
+    }
+  */
+
+  metadata Json?
+  /*
+    metadata: {
+      seo: {
+        title: product.name,
+        description: product.description
+      },
+      ...might add more later
+    }
+  */
+
+  // relations
   categoryId Int
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict) 
 
+  // product lifesicle
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // indexing
   @@index([categoryId])
 }
 
+enum CategoryStatus {
+  ACTIVE
+  INACTIVE
+}
 model Category {
   id Int @id @default(autoincrement())
+
   name String @unique
   description String
+  status CategoryStatus @default(ACTIVE)
+  
   products Product[]
 
   metadata Json? // TODO: the metadata is optional for this version, might be required for future versions

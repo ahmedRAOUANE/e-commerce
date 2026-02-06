@@ -7,7 +7,7 @@ const categories: Prisma.CategoryCreateInput[] = []
 const createProducts = async (categoryName: string) => {
     const randomProductsCount = Math.floor(Math.random() * 10);
 
-    const products = Array.from({ length: randomProductsCount }, (_, i) => ({
+    const productTemplate = (i: number): Prisma.ProductCreateInput => ({
         name: `product ${i + 1}`,
         description: "this is a dummy product to test the db, and the api",
         price: Math.floor(Math.random() * 91) + 10,
@@ -32,8 +32,20 @@ const createProducts = async (categoryName: string) => {
         // status: ["DRAFT", "ACTIVE", "OUT_OF_STOCK", "DISCONTINUED"][Math.floor(Math.random() * 4)] as Prisma.CategoryCreateInput.ProductStatus,
         status: Object.values(ProductStatus)[Math.floor(Math.random() * Object.values(ProductStatus).length)],
         salesCount: Math.floor(Math.random() * 100),
-        category: { connect: { name: categoryName } }
-    }))
+        category: { connect: { name: categoryName } },
+        inventory: {
+            sku: "somthing",
+            barcode: Math.floor((Math.random() * i) + (10000 + i)),
+            quantity: Math.floor(Math.random() * 100)
+        },
+        shipping: {
+            weight: Math.floor((Math.random() * 39) + i),
+            length: Math.floor((Math.random() * 39) + i),
+            width: Math.floor((Math.random() * 39) + i),
+            height: Math.floor((Math.random() * 39) + i),
+        }
+    })
+    const products = Array.from({ length: randomProductsCount }, (_, i) => (productTemplate(i)))
 
     for (const product of products) { 
         await prisma.product.create({data: product})
