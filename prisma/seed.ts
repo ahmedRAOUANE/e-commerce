@@ -2,12 +2,12 @@ import prisma from "@/lib/prisma";
 import { Prisma, ProductStatus } from "@prisma/client";
 import 'dotenv/config';
 
-const categories: Prisma.CategoryCreateInput[] = []
+const categories: Prisma.CategoriesCreateInput[] = []
 
-const createProducts = async (categoryName: string) => {
+const createProducts = async (categoryName: string, orderid?: number) => {
     const randomProductsCount = Math.floor(Math.random() * 10);
 
-    const productTemplate = (i: number): Prisma.ProductCreateInput => ({
+    const productTemplate = (i: number): Prisma.ProductsCreateInput => ({
         name: `product ${i + 1}`,
         description: "this is a dummy product to test the db, and the api",
         price: Math.floor(Math.random() * 91) + 10,
@@ -33,6 +33,7 @@ const createProducts = async (categoryName: string) => {
         status: Object.values(ProductStatus)[Math.floor(Math.random() * Object.values(ProductStatus).length)],
         salesCount: Math.floor(Math.random() * 100),
         category: { connect: { name: categoryName } },
+        order: {connect: {id: orderid}},
         inventory: {
             sku: "somthing",
             barcode: Math.floor((Math.random() * i) + (10000 + i)),
@@ -48,7 +49,7 @@ const createProducts = async (categoryName: string) => {
     const products = Array.from({ length: randomProductsCount }, (_, i) => (productTemplate(i)))
 
     for (const product of products) { 
-        await prisma.product.create({data: product})
+        await prisma.products.create({data: product})
     }
 }
 
@@ -60,11 +61,11 @@ const createCategories = async () => {
         })
     }
 
-    await prisma.category.createMany({data: categories});
+    await prisma.categories.createMany({data: categories});
 }
 
 const fetchCategoris = async () => {
-    return await prisma.category.findMany();
+    return await prisma.categories.findMany();
 }
 
 export async function main() {

@@ -20,10 +20,10 @@ enum ProductStatus {
   DRAFT
   ACTIVE
   OUT_OF_STOCK
-  DISCONTINUED
+  // DISCONTINUED
 }
 
-model Product {
+model Products {
   id Int @id @default(autoincrement())
   
   name String
@@ -77,7 +77,9 @@ model Product {
 
   // relations
   categoryId Int
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict) 
+  orderId Int
+  category Categories @relation(fields: [categoryId], references: [id], onDelete: Restrict) 
+  order Oreders @relation(fields: [orderId], references: [id], onDelete: Restrict) 
 
   // product lifesicle
   createdAt DateTime @default(now())
@@ -91,17 +93,103 @@ enum CategoryStatus {
   ACTIVE
   INACTIVE
 }
-model Category {
+model Categories {
   id Int @id @default(autoincrement())
 
   name String @unique
   description String
   status CategoryStatus @default(ACTIVE)
   
-  products Product[]
+  products Products[]
 
   metadata Json? // TODO: the metadata is optional for this version, might be required for future versions
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  DELIVERED
+  PROCESSING
+  // SHIPPED // in case the shipping service is available
+  PENDING
+  CANCELED
+}
+
+enum OrderPayment {
+  PAYED
+  PENDING
+  REFUNDED
+}
+model Oreders {
+  id Int @id @default(autoincrement())
+  name String
+  status OrderStatus @default(PROCESSING)
+  orderId Int // (6degits-format) this will work as a serial number for the order, will be used later in case the owner wants to cancel the order
+  payment OrderPayment @default(PENDING)
+
+  // products
+  products Products[]
+  totalOrderedItemsCount Int
+  eachProdectCount Json
+  /*
+    eachProdectCount: {
+      product: Product.name,
+      count: number
+    }
+  */
+
+  // owner
+  ownerContact String // the owner email or phone number
+  ownerName String? @default("unknown") // the owner name, optional - in case the owner prefered to not reveal his name
+
+}
+
+enum Currency {
+  DOLLAR
+  DINAR
+}
+
+enum Languages {
+  ENGLISH
+  ARABIC
+}
+model AppData {
+  id Int @id @default(autoincrement())
+  storeName String
+  supportEmail String
+  phnoe String
+  // currency Currency @default(DOLLAR) // TODO: this feature myght be implemented in future versions
+  language Languages @default(ARABIC) 
+  storeAddress String
+
+  // appearence
+  theme String
+  primaryColor String
+
+  // lifesicle
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Analitycs {
+  id Int @id @default(autoincrement())
+
+  // products
+  totalProductsCount Int @default(0)
+  activeProducrsCount Int @default(0) //? in stock products
+  draftProductsCount Int @default(0)
+  outOfStackProductsCount Int @default(0)
+  totalItemsCount Int @default(0)
+
+  // categories
+  totalCategoryCount Int @default(0)
+  activeCategoryCount Int @default(0)
+  inactiveCategoryCount Int @default(0)
+
+  // oreders
+  totalOrdersCount Int @default(0)
+  pendingOrdersCount Int @default(0)
+
+  // revenu
 }
