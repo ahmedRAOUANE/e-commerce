@@ -1,10 +1,10 @@
-// // api/v1/route.ts
+// api/v1/route.ts
 
-// // import { prisma } from "@/lib/prisma"
-// import { NextResponse } from "next/server";
+import { fetchProductsService } from "@/services/products";
+import { NextResponse } from "next/server";
 
-// export const GET = async () => {
-//     // const posts = prisma.post.findMany();
+export const GET = async () => {
+    const res = await fetchProductsService();
 
-//     // return NextResponse.json(posts);
-// }
+    return NextResponse.json(res);
+}

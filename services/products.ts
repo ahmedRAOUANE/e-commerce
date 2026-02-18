@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 type ProductResponse<S, E> = [null, S] | [E, null]; // S for Success E for Error
 
@@ -6,7 +7,7 @@ function ok<S>(data: S): ProductResponse<S, never> {
     return [null, data];
 }
 
-function error<E>(error: E): ProductResponse<never, E> {
+function error<E extends { reson?: string }>(error: E): ProductResponse<never, E> {
     return [error, null];
 }
 
@@ -27,4 +28,12 @@ export async function fetchProductsService(filter?: FilterType) {
     } else {
         res = await prisma.products.findMany();
     }
+
+    if (!res) {
+        return error({reson: "unable to fetch products"});
+    }
+
+    console.log("services > products > fetchProductsService > res: ", res);
+
+    return ok(res);
 }
