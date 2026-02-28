@@ -1,15 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
-
-type ProductResponse<S, E> = [null, S] | [E, null]; // S for Success E for Error
-
-function ok<S>(data: S): ProductResponse<S, never> {
-    return [null, data];
-}
-
-function error<E extends { reson?: string }>(error: E): ProductResponse<never, E> {
-    return [error, null];
-}
+import { error, ok } from "@/utils/response";
 
 interface FilterType {
     type: "all" | "active",
