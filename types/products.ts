@@ -1,6 +1,6 @@
-import { Products } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-type CreateProductKeys = "name" | "description" | "price" | "categoryId" | "price" | "status";
-export type CreateProductInput = Pick<Products, CreateProductKeys>;
+type OmittedProductKeys = "id" | "salesCount" | "createdAt" | "updatedAt" | "orderItems";
+export type CreateProductInput = Omit<Prisma.ProductsCreateInput, OmittedProductKeys>;
 
 export type ProductResponse<S, E> = [null, S] | [E, null]; // S for Success E for Error
