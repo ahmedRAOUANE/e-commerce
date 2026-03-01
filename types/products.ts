@@ -3,4 +3,4 @@ import { Prisma } from "@prisma/client";
 type OmittedProductKeys = "id" | "salesCount" | "createdAt" | "updatedAt" | "orderItems";
 export type CreateProductInput = Omit<Prisma.ProductsCreateInput, OmittedProductKeys>;
 
-export type ProductResponse<S, E> = [null, S] | [E, null]; // S for Success E for Error
+export type ProductResponse<E, S> = [null, S] | [E, null]; // S for Success E for Error

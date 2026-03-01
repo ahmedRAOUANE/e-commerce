@@ -2,25 +2,24 @@
 
 import { ProductsCreateInputObjectSchema } from "@/prisma/generated/schemas";
 import { createProductService, fetchProductsService } from "@/services/products";
+import { res } from "@/utils/api-response";
+import { handleService } from "@/utils/handle-service";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async () => {
-    const res = await fetchProductsService();
-
-    return NextResponse.json(res);
-}
+export const GET = async () => 
+    handleService(
+        await fetchProductsService()
+    );
 
 export const POST = async (req: NextRequest) => {
     const body = await req.json()
 
     const parsedData = ProductsCreateInputObjectSchema.safeParse(body);
     if (!parsedData.success) 
-        return NextResponse.json({reson: parsedData.error.message ?? "invalid product data"});
-    
-    const [error, data] = await createProductService(parsedData.data);
+        return NextResponse.json(res.fail({reason: parsedData.error.message ?? "invalid product data", code: 403}));
 
-    if (error) 
-        return NextResponse.json({success: false}, {status: 400});
-
-    return NextResponse.json({success: true, data}, {status: 201});
+    return handleService(
+        await createProductService(parsedData.data),
+        201
+    )
 }
