@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider = "prisma-zod-generator"
+}
+
 datasource db {
   provider = "sqlite"
 }
@@ -32,6 +36,7 @@ model Products {
   price Int
   discount Int @default(0)
   salesCount Int @default(0)
+  quantity Int @default(1)
 
   status ProductStatus @default(DRAFT)
 
