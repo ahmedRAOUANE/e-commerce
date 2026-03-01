@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => 
     handleService(
-        await fetchProductsService(),
+        fetchProductsService(),
         200
     );
 
@@ -17,10 +17,15 @@ export const POST = async (req: NextRequest) => {
 
     const parsedData = ProductsCreateInputObjectSchema.safeParse(body);
     if (!parsedData.success) 
-        return NextResponse.json(res.fail({reason: parsedData.error.message ?? "invalid product data", code: 403}));
+        return NextResponse.json(res.fail({
+            message: parsedData.error.message, 
+            code: "VALIDATION_ERROR",
+            status: 400,
+            name: "validation error"
+        }));
 
     return handleService(
-        await createProductService(parsedData.data),
+        createProductService(parsedData.data),
         201
     )
 }

@@ -1,4 +1,4 @@
-import { ErrorTemplate } from "@/types/templates";
+import { AppError } from "@/errors/base.error";
 
 export type ApiSuccess<T> = {
     success: true;
@@ -7,7 +7,6 @@ export type ApiSuccess<T> = {
 
 export type ApiFail<E = unknown> = {
     success: false;
-    reason?: string;
 } & E;
 
 export type ApiResponse<T, E = unknown> =
@@ -22,9 +21,9 @@ export const res = {
         };
     },
 
-    fail<E extends ErrorTemplate>(
+    fail<E extends AppError>(
         error: E
-    ): ApiFail<Omit<E, "reason">> {
+    ): ApiFail<E> {
         return {
             success: false,
             ...error,
