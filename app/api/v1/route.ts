@@ -8,7 +8,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => 
     handleService(
-        await fetchProductsService()
+        await fetchProductsService(),
+        200
     );
 
 export const POST = async (req: NextRequest) => {

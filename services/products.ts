@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { CreateProductInput, ProductResponse } from "@/types/products";
+import { CreateProductInput, ServiceResult } from "@/types/products";
 import { ErrorTemplate } from "@/types/templates";
 import { error, ok } from "@/utils/success-status";
 import { Prisma, Products, ProductStatus } from "@prisma/client";
@@ -13,7 +13,7 @@ interface ProductFilterType {
 
 export async function fetchProductsService(
     filter?: Partial<ProductFilterType>
-): Promise<ProductResponse<ErrorTemplate, Products | Products[]>> {
+): Promise<ServiceResult<ErrorTemplate, Products | Products[]>> {
     try {
         if (filter?.id) {
             const product = await prisma.products.findUnique({ where: { id: filter?.id } })
@@ -30,7 +30,7 @@ export async function fetchProductsService(
             where.status = filter.status;
         }
 
-        const products = await prisma.products.findMany({ where, take: filter?.max });
+        const products = await prisma.products.findMany({ where, take: Math.min(filter?.max ?? 20, 100) });
 
         return ok(products);
     } catch (err) {
@@ -41,7 +41,7 @@ export async function fetchProductsService(
 
 export async function createProductService(
     data: CreateProductInput
-): Promise<ProductResponse<ErrorTemplate, Products>> {
+): Promise<ServiceResult<ErrorTemplate, Products>> {
     try { 
         const product = await prisma.products.create({data})
 
