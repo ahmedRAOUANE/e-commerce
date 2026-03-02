@@ -1,7 +1,8 @@
 // api/v1/route.ts
 
 import { ProductsCreateInputObjectSchema } from "@/prisma/generated/schemas";
-import { createProductService, fetchProductsService } from "@/services/products";
+import { createProductService } from "@/services/products/create";
+import { fetchProductsService } from "@/services/products/fetch";
 import { res } from "@/utils/api-response";
 import { handleService } from "@/utils/handle-service";
 import { NextRequest, NextResponse } from "next/server";

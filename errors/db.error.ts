@@ -1,11 +1,12 @@
 import { AppError } from "./base.error";
 
 export class DatabaseError extends AppError {
-    constructor() {
+    constructor(message: string, cause: Record<string, unknown>) {
         super(
-            "Database operation failed",
+            message ?? "Database operation failed",
             500,
-            "DATABASE_ERROR"
+            "DATABASE_ERROR",
         );
+        this.cause = cause
     }
 }
