@@ -1,19 +1,48 @@
-import { ProductAlreadyExistsError } from "@/errors/product.error";
+import { AppError } from "@/errors/base.error";
+import { DatabaseError } from "@/errors/db.error";
 import prisma from "@/lib/prisma";
 import { CreateProductInput } from "@/types/products";
 import { Products } from "@prisma/client";
 
+/**
+ * @param data.category must be {connect: {id}}, where the id is the category id
+ * @param data 
+ * @returns {Promise<Products>}
+ */
 export async function createProductService(
     data: CreateProductInput
 ): Promise<Products> {
-    const exists = await prisma.products.findFirst({
-        where: {
-            name: data.name,
-            // categoryId: data.category
-        }
-    })
+    try {
+        const categoryId = data.category?.connect?.id;
+        if (!categoryId) throw new AppError(
+            "category id is not available",
+            400,
+            "MISSING_PRODUCT_CATEGORY_ID"
+        );
 
-    if (exists) throw new ProductAlreadyExistsError();
+        return await prisma.products.upsert({
+            where: {
+                name_categoryId: {
+                    name: data.name,
+                    categoryId,
+                },
+            },
 
-    return await prisma.products.create({ data });
+            create: data,
+
+            update: {
+                quantity: {
+                    increment: data.quantity ?? 1,
+                },
+            },
+        });
+    } catch (error) {
+        if (error instanceof AppError) 
+            throw error
+
+        throw new DatabaseError(
+            "failed to create or update new product",
+            {cause: error}
+        )
+    }
 }

@@ -34,6 +34,9 @@ export async function fetchProductsService(
         });
 
     } catch (error) {
+        if (error instanceof AppError)
+            throw error;
+        
         throw new DatabaseError("Failed to fetch products", {
             cause: error,
         });

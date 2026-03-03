@@ -93,6 +93,8 @@ model Products {
 
   // indexing
   @@index([categoryId])
+
+  @@unique([name, categoryId])
 }
 
 enum CategoryStatus {
