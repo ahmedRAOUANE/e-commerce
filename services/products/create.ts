@@ -1,8 +1,7 @@
 import { AppError } from "@/errors/base.error";
 import { DatabaseError } from "@/errors/db.error";
 import prisma from "@/lib/prisma";
-import { CreateProductInput } from "@/types/products";
-import { Products } from "@prisma/client";
+import { AdminProductOutput, CreateProductInput } from "@/types/products";
 
 /**
  * @param data.category must be {connect: {id}}, where the id is the category id
@@ -11,7 +10,7 @@ import { Products } from "@prisma/client";
  */
 export async function createProductService(
     data: CreateProductInput
-): Promise<Products> {
+): Promise<AdminProductOutput> {
     try {
         const categoryId = data.category?.connect?.id;
         if (!categoryId) throw new AppError(

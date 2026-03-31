@@ -48,6 +48,7 @@ async function createProducts(categories: Categories[]) {
                             alt: "Product image",
                         },
                     ],
+                    tags: [],
                     inventory: {
                         sku: `SKU-${Date.now()}-${i}`,
                         barcode: randomInt(100000, 999999),
@@ -62,6 +63,12 @@ async function createProducts(categories: Categories[]) {
                     category: {
                         connect: { id: category.id },
                     },
+                    metadata: {
+                        seo: {
+                            title: `Product ${i + 1} - ${category.name}`,
+                            description: "Dummy product",
+                        }
+                    }
                 },
             });
 

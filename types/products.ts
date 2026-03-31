@@ -1,7 +1,18 @@
-import { Prisma } from "@prisma/client";
+import { CreateProductDto, publicProductOutputDto } from "@/dto/product";
+import { productCategoryConnectSchema, productImageSchema, productInventorySchema, productMetadataSchema, productShippingSchema } from "@/dto/product/schemas";
+import { Products } from "@prisma/client";
+import z from "zod";
 
-type OmittedProductKeys = "id" | "salesCount" | "createdAt" | "updatedAt" | "orderItems";
-export type CreateProductInput = Omit<Prisma.ProductsCreateInput, OmittedProductKeys>;
+export type CreateProductInput = z.infer<typeof CreateProductDto>
+export type ProductImage = z.infer<typeof productImageSchema>
+export type ProductInventory = z.infer<typeof productInventorySchema>
+export type ProductShipping = z.infer<typeof productShippingSchema>
+export type ProductMetadata = z.infer<typeof productMetadataSchema>
+export type ProductCategoryConnect = z.infer<typeof productCategoryConnectSchema>
 
-// export type ProductResponse<E, S> = [null, S] | [E, null]; // S for Success E for Error
-// export type ServiceResult<E, S> = [null, S] | [E, null]; // S for Success E for Error
+export type PublicProductOutput = z.infer<typeof publicProductOutputDto>
+
+type OmittedAdminProductOutputKeys = "salesCount";
+export type AdminProductOutput = Omit<Products, OmittedAdminProductOutputKeys>
+
+export type ProductImgsType = ProductImage

@@ -1,22 +1,22 @@
 // api/v1/route.ts
 
-import { ProductsCreateInputObjectSchema } from "@/prisma/generated/schemas";
+import { CreateProductDto } from "@/dto/product";
 import { createProductService } from "@/services/products/create";
-import { fetchProductsService } from "@/services/products/fetch";
+import { fetchPublicProductsService } from "@/services/products/fetch";
 import { res } from "@/utils/api-response";
 import { handleService } from "@/utils/handle-service";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => 
     handleService(
-        fetchProductsService(),
+        fetchPublicProductsService({max: 2}),
         200
     );
 
 export const POST = async (req: NextRequest) => {
     const body = await req.json()
 
-    const parsedData = ProductsCreateInputObjectSchema.safeParse(body);
+    const parsedData = CreateProductDto.safeParse(body);
     if (!parsedData.success) 
         return NextResponse.json(res.fail({
             message: parsedData.error.message, 
