@@ -1,12 +1,8 @@
 import z from "zod";
-import { ProductsCreateInputObjectZodSchema, ProductStatusSchema } from "@/prisma/generated/schemas";
-import {nonEmptyString, productCategoryConnectSchema, productCategorySelectSchema, productImgsSchema, productInventorySchema, productMetadataSchema, productShippingSchema} from "./schemas"
+import { ProductStatusSchema } from "@/prisma/generated/schemas";
+import {nonEmptyString, productCategoryConnectSchema, productCategoryGetSchema, productImgsSchema, productInventorySchema, productMetadataSchema, productShippingSchema} from "./schemas"
 
-export const CreateProductDto = ProductsCreateInputObjectZodSchema.omit({
-    salesCount: true,
-    createdAt: true,
-    orderItems: true,
-}).extend({
+export const CreateProductDto = z.object({
     name: nonEmptyString,
     description: nonEmptyString,
     price: z.number().int().positive(),
@@ -21,15 +17,7 @@ export const CreateProductDto = ProductsCreateInputObjectZodSchema.omit({
     category: productCategoryConnectSchema,
 })
 
-export const publicProductOutputDto = ProductsCreateInputObjectZodSchema.omit({
-    salesCount: true,
-    quantity: true,
-    status: true,
-    inventory: true,
-    shipping: true,
-    orderItems: true,
-    createdAt: true,
-}).extend({
+export const publicProductOutputDto = z.object({
     id: z.number(),
     name: nonEmptyString,
     description: nonEmptyString,
@@ -38,5 +26,49 @@ export const publicProductOutputDto = ProductsCreateInputObjectZodSchema.omit({
     imgs: productImgsSchema,
     tags: z.array(nonEmptyString).optional(),
     metadata: productMetadataSchema.optional(),
-    category: productCategorySelectSchema,
+    category: productCategoryGetSchema,
+})
+
+// 1. Full admin view (for edit form + single product detail)
+export const adminProductFullOutputDto = z.object({
+    id: z.number(),
+    name: nonEmptyString,
+    description: nonEmptyString,
+    price: z.number().int().positive(),
+    discount: z.number().int().nonnegative().optional(),
+    quantity: z.number().int().nonnegative().optional(),
+    status: ProductStatusSchema,
+    imgs: productImgsSchema,
+    tags: z.array(nonEmptyString).optional(),
+    inventory: productInventorySchema,
+    shipping: productShippingSchema, 
+    metadata: productMetadataSchema, 
+    category: productCategoryGetSchema,
+    salesCount: z.number().int().nonnegative(),     // ← admin-only field
+    createdAt: z.date(),
+    updatedAt: z.date(),
+});
+
+// 2. List/table view (for admin/products/page.tsx - lighter)
+export const adminProductListOutputDto = adminProductFullOutputDto
+    .omit({ inventory: true, shipping: true, metadata: true, description: true })
+    .extend({ categoryName: nonEmptyString }); // denormalized for table performance
+
+// 3. Summary view (for dashboard popular/recent products)
+export const adminProductSummaryOutputDto = z.object({
+    id: z.number(),
+    name: nonEmptyString,
+    price: z.number().int().positive(),
+    discount: z.number().int().nonnegative().optional(),
+    imgs: productImgsSchema, // first image only
+    salesCount: z.number().int().nonnegative(),
+    categoryName: nonEmptyString,
+    status: ProductStatusSchema,
+});
+
+// 4. product created
+export const adminProductCreatedDTO = adminProductFullOutputDto.pick({
+    id: true,
+    name: true,
+    createdAt: true
 })

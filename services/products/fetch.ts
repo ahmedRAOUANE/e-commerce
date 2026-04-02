@@ -1,13 +1,18 @@
 import { publicProductOutputDto } from "@/dto/product";
-import { productCategorySelectSchema } from "@/dto/product/schemas";
+import { productCategoryGetSchema } from "@/dto/product/schemas";
+import { buildSelect } from "@/dto/select.dto";
 import { AppError } from "@/errors/base.error";
 import { DatabaseError } from "@/errors/db.error";
 import { ProductNotFoundError } from "@/errors/product.error";
 import { ValidationError } from "@/errors/validation.error";
 import prisma from "@/lib/prisma";
 import { PublicProductOutput } from "@/types/products";
-import { buildSelect } from "@/dto/select.dto";
-import { Prisma, Products, ProductStatus } from "@prisma/client";
+import { CategoryStatus, Prisma, ProductStatus } from "@prisma/client";
+
+interface ProductPublicFilterType {
+    max: number,
+    id?: number,
+}
 
 const publicProductSelect = buildSelect(
     publicProductOutputDto.omit({
@@ -18,30 +23,19 @@ const publicProductSelect = buildSelect(
 const publicProductSelectWithCategory = {
     ...publicProductSelect,
     category: {
-        select: buildSelect(productCategorySelectSchema.shape),
+        select: buildSelect(productCategoryGetSchema.shape),
     },
 } satisfies Prisma.ProductsSelect;
 
-interface ProductFilterType {
-    // type: "ALL" | "DRAFT" | "ACTIVE" | "OUT_OF_STOCK",
-    status: "ALL" | ProductStatus,
-    max: number,
-    id?: number,
-}
-
 export async function fetchPublicProductsService(
-    filter?: Partial<ProductFilterType>
+    filter?: Partial<ProductPublicFilterType>
 ): Promise<PublicProductOutput[]> {
-
     const where: Prisma.ProductsWhereInput = {
         category: {
             status: "ACTIVE"
-        }, // always select the products under of active categories
+        },
+        status: "ACTIVE"
     };
-
-    if (filter?.status && filter.status !== "ALL") {
-        where.status = filter.status;
-    }
 
     const limit = Math.min(filter?.max ?? 20, 100);
 
@@ -56,10 +50,9 @@ export async function fetchPublicProductsService(
         });
         
         const parsedProducts = publicProductOutputDto.array().safeParse(products);
-        console.log("parsedProducts: ", parsedProducts);
         if (!parsedProducts.success)
             throw new ValidationError(
-                "Fetched products do not match the public product dto"
+                "Fetched products do not match the public product standards"
             );
 
         return parsedProducts.data;
@@ -75,7 +68,7 @@ export async function fetchPublicProductsService(
 
 export async function fetchSinglePublicProductService(
     id: number
-): Promise<Products> {
+): Promise<PublicProductOutput> {
     try {
         const product = await prisma.products.findUnique({
             where: { id }
@@ -84,7 +77,16 @@ export async function fetchSinglePublicProductService(
         if (!product)
             throw new ProductNotFoundError();
 
-        return product;
+        if (product.status != "ACTIVE")
+            throw new AppError("the requested product is not active");
+
+        const parsedProduct = publicProductOutputDto.safeParse(product);
+        if (!parsedProduct.success)
+            throw new ValidationError(
+                "Fetched product do not match the public product dto"
+            );
+
+        return parsedProduct.data;
     } catch (error) {
         if (error instanceof AppError)
             throw error;
@@ -93,5 +95,58 @@ export async function fetchSinglePublicProductService(
             "Failed to fetch product",
             { cause: error },
         );
+    }
+}
+
+interface AdminProductFilterType extends ProductPublicFilterType {
+    status: ProductStatus | "ALL",
+    categoryStatus: CategoryStatus | "ALL"
+}
+
+const buildQuery = (filter?: Partial<AdminProductFilterType>) => {
+    const where: Prisma.ProductsWhereInput = {}
+
+    if (filter?.status && filter?.status !== "ALL") {
+        where.status = filter?.status;
+    }
+
+    if (filter?.categoryStatus && filter?.categoryStatus !== "ALL") {
+        where.category = {
+            status: filter?.categoryStatus
+        };
+    }
+
+    return where;
+}
+
+export async function fetchAdminProductsService(
+    filter?: Partial<AdminProductFilterType>
+): Promise<PublicProductOutput[]> {
+    const limit = Math.min(filter?.max ?? 20, 100);
+
+    if (limit <= 0)
+        throw new ValidationError("Invalid products limit");
+
+    try {
+        const products = await prisma.products.findMany({
+            where: buildQuery(filter),
+            take: limit,
+            select: publicProductSelectWithCategory
+        });
+
+        const parsedProducts = publicProductOutputDto.array().safeParse(products);
+        if (!parsedProducts.success)
+            throw new ValidationError(
+                "Fetched products do not match the public product dto"
+            );
+
+        return parsedProducts.data;
+    } catch (error) {
+        if (error instanceof AppError)
+            throw error;
+
+        throw new DatabaseError("Failed to fetch products", {
+            cause: error,
+        });
     }
 }

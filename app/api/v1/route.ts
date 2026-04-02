@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => 
     handleService(
-        fetchPublicProductsService({max: 2}),
+        fetchPublicProductsService({max: 1}),
         200
     );
 

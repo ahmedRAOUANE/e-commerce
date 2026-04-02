@@ -45,3 +45,10 @@ next-env.d.ts
 
 /app/generated/prisma
 /prisma/generated
+
+MEMORY.md
+VISUAL_DIAGRAMS.md
+EXECUTIVE_SUMMARY.md
+BUGS_AND_ISSUES.md
+ARCHITECTURE_ANALYSIS.md
+ANALYSIS_INDEX.md

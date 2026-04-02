@@ -1,16 +1,22 @@
+import { adminProductCreatedDTO } from "@/dto/product";
+import { buildSelect } from "@/dto/select.dto";
 import { AppError } from "@/errors/base.error";
 import { DatabaseError } from "@/errors/db.error";
 import prisma from "@/lib/prisma";
-import { AdminProductOutput, CreateProductInput } from "@/types/products";
+import { AdminProductCreated, CreateProductInput } from "@/types/products";
 
 /**
  * @param data.category must be {connect: {id}}, where the id is the category id
  * @param data 
- * @returns {Promise<Products>}
+ * @returns {Promise<{
+ *  name: string,
+ *  id: number,
+ *  createdAt: Date,
+ * }>}
  */
 export async function createProductService(
     data: CreateProductInput
-): Promise<AdminProductOutput> {
+): Promise<AdminProductCreated> {
     try {
         const categoryId = data.category?.connect?.id;
         if (!categoryId) throw new AppError(
@@ -19,7 +25,7 @@ export async function createProductService(
             "MISSING_PRODUCT_CATEGORY_ID"
         );
 
-        return await prisma.products.upsert({
+        const createdProduct = await prisma.products.upsert({
             where: {
                 name_categoryId: {
                     name: data.name,
@@ -34,7 +40,16 @@ export async function createProductService(
                     increment: data.quantity ?? 1,
                 },
             },
+
+            // select: {id, name, createdAt}
+            select: buildSelect(adminProductCreatedDTO.shape)
         });
+
+        const parsedProduct = adminProductCreatedDTO.safeParse(createdProduct);
+        if (!parsedProduct.success)
+            throw new AppError("the created product does not match the standards");
+
+        return parsedProduct.data
     } catch (error) {
         if (error instanceof AppError) 
             throw error

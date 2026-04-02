@@ -35,7 +35,7 @@ export const productCategoryConnectSchema = z.object({
     }).strict(),
 }).strict()
 
-export const productCategorySelectSchema = z.object({
+export const productCategoryGetSchema = z.object({
     id: z.number().int().positive(),
     name: nonEmptyString,
     description: nonEmptyString,
