@@ -2,13 +2,9 @@ import Categories from "@/components/home-page/categories";
 import Featured from "@/components/home-page/featured";
 import Header from "@/components/home-page/header";
 import Hero from "@/components/home-page/hero";
-import prisma from "@/lib/prisma";
 import Link from "next/link";
 
 export default async function Home() {
-  const posts = await prisma.products.findMany();
-  console.log("data: ", posts);
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

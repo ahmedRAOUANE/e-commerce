@@ -1,12 +1,14 @@
-"use client"
+"use client";
 
-import { featuredProducts } from "@/shared/placeholders";
+import { PublicProductOutput } from "@/types/products";
+import { buildDiscount } from "@/utils/build-discount";
+import Image from "next/image";
 import Link from "next/link";
 
-const ProductCard = ({ product }: { product: typeof featuredProducts[0] }) => {
-    const discount = Math.round(
-        ((product.originalPrice - product.price) / product.originalPrice) * 100
-    );
+const ProductCard = ({ product }: { product: PublicProductOutput }) => {
+    const discountedPrice = buildDiscount(product);
+
+    const hasDiscount = !!product.discount && product.discount > 0;
 
     return (
         <Link
@@ -19,13 +21,23 @@ const ProductCard = ({ product }: { product: typeof featuredProducts[0] }) => {
             {/* Image container */}
             <div className="relative aspect-square bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
-                    🛍️
+                    {
+                        product.imgs.length > 0 ? (
+                                <Image 
+                                    alt={product.imgs[0].alt} src={product.imgs[0].url} 
+                                    width={100} height={100}
+                                    className="w-full h-full" 
+                                />
+                        ) : (
+                                <div>🛍️</div>
+                        )
+                    }
                 </div>
 
                 {/* Discount badge */}
-                {discount > 0 && (
+                {hasDiscount && (
                     <div className="absolute top-3 right-3 bg-linear-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                        -{discount}%
+                        -{product.discount}%
                     </div>
                 )}
 
@@ -43,44 +55,33 @@ const ProductCard = ({ product }: { product: typeof featuredProducts[0] }) => {
                     {product.name}
                 </h3>
 
-                {/* Rating */}
-                <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                            <span
-                                key={i}
-                                className={`text-sm ${i < Math.floor(product.rating)
-                                    ? "text-yellow-400"
-                                    : "text-gray-300 dark:text-gray-600"
-                                    }`}
-                            >
-                                ★
-                            </span>
-                        ))}
-                    </div>
-                    <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                        ({product.rating})
-                    </span>
-                </div>
-
-                {/* Price */}
-                <div className="flex items-center gap-2">
+                {/* Price Section */}
+                <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-2xl font-bold text-foreground">
-                        ${product.price.toFixed(2)}
+                        ${discountedPrice.toFixed(2)}
                     </span>
-                    {product.originalPrice > product.price && (
+
+                    {hasDiscount && (
                         <span className="text-sm text-gray-500 dark:text-gray-500 line-through">
-                            ${product.originalPrice.toFixed(2)}
+                            ${product.price.toFixed(2)}
                         </span>
                     )}
                 </div>
+
+                {/* Optional: You can add savings amount */}
+                {hasDiscount && (
+                    <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                        You save ${(product.price - discountedPrice).toFixed(2)}
+                    </p>
+                )}
 
                 {/* Add to cart button (appears on hover) */}
                 <button
                     type="button"
                     onClick={(e) => {
                         e.preventDefault();
-                        // Handle add to cart
+                        // TODO: Add to cart logic (we'll handle this later with cart persistence)
+                        console.log("Add to cart clicked for product", product.id);
                     }}
                     className="w-full mt-4 py-2.5 bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg font-semibold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
                 >
@@ -91,4 +92,4 @@ const ProductCard = ({ product }: { product: typeof featuredProducts[0] }) => {
     );
 };
 
-export default ProductCard
+export default ProductCard;

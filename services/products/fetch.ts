@@ -71,20 +71,20 @@ export async function fetchSinglePublicProductService(
 ): Promise<PublicProductOutput> {
     try {
         const product = await prisma.products.findUnique({
-            where: { id }
+            where: { id, status: "ACTIVE" },
+            select: publicProductSelectWithCategory
         });
 
         if (!product)
             throw new ProductNotFoundError();
 
-        if (product.status != "ACTIVE")
-            throw new AppError("the requested product is not active");
-
         const parsedProduct = publicProductOutputDto.safeParse(product);
-        if (!parsedProduct.success)
+        if (!parsedProduct.success) {
+            console.log(parsedProduct.error);
             throw new ValidationError(
                 "Fetched product do not match the public product dto"
             );
+        }
 
         return parsedProduct.data;
     } catch (error) {

@@ -1,8 +1,10 @@
-import { featuredProducts } from "@/shared/placeholders"
 import Link from "next/link"
-import ProductCard from "./product-card"
+import ProductCard from "../../product-card"
+import { fetchPublicProductsService } from "@/services/products/fetch"
 
-const Featured = () => {
+const Featured = async () => {
+    const featuredProducts = await fetchPublicProductsService({ max: 4 });
+
     return (
         <section className="relative py-20 md:py-24 bg-gray-50 dark:bg-gray-900 overflow-hidden">
             {/* Background decoration */}
