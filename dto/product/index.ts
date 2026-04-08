@@ -81,7 +81,7 @@ export const updateProductDto = CreateProductDto.partial().extend({
 
 export const adminProductUpdatedDTO = z.object({
     id: z.number(),
-    name: z.string(),
+    name: nonEmptyString,
     price: z.number().int().positive(),
     discount: z.number().int().nonnegative().nullable(),
     quantity: z.number().int().nonnegative(),
@@ -97,7 +97,7 @@ export const deleteProductDto = z.object({
 
 export const adminProductDeletedDTO = z.object({
     id: z.number(),
-    name: z.string(),
+    name: nonEmptyString,
     deletedAt: z.date(),
-    message: z.string().default("Product deleted successfully"),
+    message: nonEmptyString.default("Product deleted successfully"),
 });
