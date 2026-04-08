@@ -19,6 +19,15 @@ export const adminCategoryCreatedDTO = z.object({
     message: nonEmptyString.default("Category created successfully"),
 });
 
-// Types
-export type CreateCategoryInput = z.infer<typeof createCategoryDto>;
-export type AdminCategoryCreatedOutput = z.infer<typeof adminCategoryCreatedDTO>;
+export const updateCategoryDto = createCategoryDto.partial().extend({
+    id: z.number().int().positive("Category ID is required"),
+});
+
+export const adminCategoryUpdatedDTO = z.object({
+    id: z.number(),
+    name: nonEmptyString,
+    description: nonEmptyString.nullable(),
+    status: CategoryStatusSchema,
+    updatedAt: z.date(),
+    message: nonEmptyString.default("Category updated successfully"),
+});

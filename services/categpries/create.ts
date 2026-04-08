@@ -3,7 +3,7 @@ import { AppError } from "@/errors/base.error";
 import { DatabaseError } from "@/errors/db.error";
 import { ValidationError } from "@/errors/validation.error";
 import { createCategoryDto, adminCategoryCreatedDTO} from "@/dto/categories";
-import { AdminCategoryCreatedOutput, CreateCategoryInput } from "@/dto/categories";
+import { AdminCategoryCreatedOutput, CreateCategoryInput } from "@/types/categories";
 import z from "zod";
 
 export async function createCategoryService(
