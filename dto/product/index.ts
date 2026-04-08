@@ -72,3 +72,20 @@ export const adminProductCreatedDTO = adminProductFullOutputDto.pick({
     name: true,
     createdAt: true
 })
+
+// update product
+export const updateProductDto = CreateProductDto.partial().extend({
+    id: z.number().int().positive(),           
+    category: productCategoryConnectSchema.optional(), 
+});
+
+export const adminProductUpdatedDTO = z.object({
+    id: z.number(),
+    name: z.string(),
+    price: z.number().int().positive(),
+    discount: z.number().int().nonnegative().nullable(),
+    quantity: z.number().int().nonnegative(),
+    status: ProductStatusSchema,
+    updatedAt: z.date(),
+    //? Optional: return full data if needed
+});
