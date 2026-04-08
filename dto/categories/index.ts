@@ -42,3 +42,28 @@ export const adminCategoryDeletedDTO = z.object({
     deletedAt: z.date(),
     message: nonEmptyString.default("Category deleted successfully"),
 });
+
+export const publicCategoryOutputDto = z.object({
+    id: z.number(),
+    name: nonEmptyString,
+    description: nonEmptyString.nullable(),
+    status: CategoryStatusSchema,
+});
+
+// Admin list/table view (lighter)
+export const adminCategoryListOutputDto = z.object({
+    id: z.number(),
+    name: nonEmptyString,
+    description: nonEmptyString.nullable(),
+    status: CategoryStatusSchema,
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    _count: z.object({
+        products: z.number().optional(), // Number of products in this category
+    }).optional(),
+});
+
+// Admin single view (for edit form)
+export const adminCategoryFullOutputDto = adminCategoryListOutputDto.extend({
+    metadata: categoryMetadataSchema,
+});
