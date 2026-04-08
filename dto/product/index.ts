@@ -89,3 +89,15 @@ export const adminProductUpdatedDTO = z.object({
     updatedAt: z.date(),
     //? Optional: return full data if needed
 });
+
+// delete product
+export const deleteProductDto = z.object({
+    id: z.number().int().positive("Product ID is required"),
+});
+
+export const adminProductDeletedDTO = z.object({
+    id: z.number(),
+    name: z.string(),
+    deletedAt: z.date(),
+    message: z.string().default("Product deleted successfully"),
+});

@@ -1,4 +1,4 @@
-import { adminProductCreatedDTO, adminProductFullOutputDto, adminProductListOutputDto, adminProductSummaryOutputDto, adminProductUpdatedDTO, CreateProductDto, publicProductOutputDto, updateProductDto } from "@/dto/product";
+import { adminProductCreatedDTO, adminProductDeletedDTO, adminProductFullOutputDto, adminProductListOutputDto, adminProductSummaryOutputDto, adminProductUpdatedDTO, CreateProductDto, deleteProductDto, publicProductOutputDto, updateProductDto } from "@/dto/product";
 import { productCategoryConnectSchema, productImageSchema, productInventorySchema, productMetadataSchema, productShippingSchema } from "@/dto/product/schemas";
 import z from "zod";
 
@@ -18,3 +18,6 @@ export type AdminProductSummaryOutput = z.infer<typeof adminProductSummaryOutput
 
 export type UpdateProductInput = z.infer<typeof updateProductDto>;
 export type AdminProductUpdatedOutput = z.infer<typeof adminProductUpdatedDTO>;
+
+export type DeleteProductInput = z.infer<typeof deleteProductDto>;
+export type AdminProductDeletedOutput = z.infer<typeof adminProductDeletedDTO>;
