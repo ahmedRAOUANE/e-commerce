@@ -31,3 +31,14 @@ export const adminCategoryUpdatedDTO = z.object({
     updatedAt: z.date(),
     message: nonEmptyString.default("Category updated successfully"),
 });
+
+export const deleteCategoryDto = z.object({
+    id: z.number().int().positive("Category ID is required"),
+});
+
+export const adminCategoryDeletedDTO = z.object({
+    id: z.number(),
+    name: nonEmptyString,
+    deletedAt: z.date(),
+    message: nonEmptyString.default("Category deleted successfully"),
+});
