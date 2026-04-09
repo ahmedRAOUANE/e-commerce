@@ -7,35 +7,38 @@ import { deleteCategoryService } from "@/services/categpries/delete";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const id = parseInt(params.id);
+    const {id} = await params;
+    const intId = parseInt(id);
     return handleService(
-        fetchAdminCategoryById(id),
+        fetchAdminCategoryById(intId),
         200
     );
 }
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const intId = parseInt(id);
     const body = await req.json();
 
     return handleService(
-        updateCategoryService({ ...body, id }),
+        updateCategoryService({ ...body, id: intId }),
         200
     );
 }
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const intId = parseInt(id);
     return handleService(
-        deleteCategoryService({ id }),
+        deleteCategoryService({ id: intId }),
         200
     );
 }

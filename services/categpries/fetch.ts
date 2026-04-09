@@ -9,6 +9,7 @@ import { buildSelect } from "@/dto/select.dto";
 import { AdminCategoryFullOutput, AdminCategoryListOutput, PublicCategoryOutput } from "@/types/categories";
 import { AppError } from "@/errors/base.error";
 import { CategoryNotFoundError } from "@/errors/category.error";
+import { ValidationError } from "@/errors/validation.error";
 
 export async function fetchPublicCategoriesService(): Promise<PublicCategoryOutput[]> {
     try {
@@ -55,9 +56,14 @@ export async function fetchAdminCategoryById(
             throw new CategoryNotFoundError(); 
         }
 
-        return adminCategoryFullOutputDto.parse(category);
+        const parsedCategory = adminCategoryFullOutputDto.safeParse(category);
+        if (!parsedCategory.success)
+            throw new ValidationError("the requested category does not match the standards")
+
+        return parsedCategory.data;
     } catch (error) {
+        console.log("fetch category error: ", error);
         if (error instanceof AppError) throw error;
-        throw new DatabaseError("Failed to fetch category by id", error as unknown as Record<string, unknown>);
+        throw new DatabaseError("Failed to fetch category by id", {cause: error});
     }
 }

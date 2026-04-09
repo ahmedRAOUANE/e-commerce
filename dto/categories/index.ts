@@ -65,5 +65,5 @@ export const adminCategoryListOutputDto = z.object({
 
 // Admin single view (for edit form)
 export const adminCategoryFullOutputDto = adminCategoryListOutputDto.extend({
-    metadata: categoryMetadataSchema,
+    metadata: categoryMetadataSchema.nullable(),
 });
