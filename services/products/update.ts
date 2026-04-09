@@ -7,7 +7,6 @@ import prisma from "@/lib/prisma";
 import { AdminProductUpdatedOutput, UpdateProductInput } from "@/types/products";
 import { ValidationError } from "@/errors/validation.error";
 import z from "zod";
-import { fetchSinglePublicProductService } from "./fetch";
 import { CategoryNotFoundError } from "@/errors/category.error";
 
 export async function updateProductService(
@@ -24,7 +23,11 @@ export async function updateProductService(
         const validated = parsedProduct.data;
 
         // 2. Check if product exists
-        const existing = await fetchSinglePublicProductService(validated.id);
+        // const existing = await fetchSinglePublicProductService(validated.id);
+        const existing = await prisma.products.findUnique({
+            where: {id: validated.id},
+            select: {category: true}
+        });
 
         if (!existing) {
             throw new ProductNotFoundError();
@@ -36,12 +39,11 @@ export async function updateProductService(
             categoryId = validated.category.connect.id;
 
             // Optional: Verify category exists
-            // TODO: change it to the getPublicCategoryService when implemented
             const categoryExists = await prisma.categories.findUnique({
                 where: { id: categoryId },
             });
             if (!categoryExists) {
-                throw new AppError("Category not found", 400, "CATEGORY_NOT_FOUND");
+                throw new CategoryNotFoundError();
             }
         }
 
@@ -63,8 +65,13 @@ export async function updateProductService(
         });
 
         // 6. Validate output
-        return adminProductUpdatedDTO.parse(updatedProduct);
+        const parsedUpdatedProduct = adminProductUpdatedDTO.safeParse(updatedProduct);
+        if (!parsedUpdatedProduct.success)
+            throw new ValidationError("update product: the returned updated product does not match the standards");
+
+        return parsedUpdatedProduct.data;
     } catch (error) {
+        console.log("update product error: ", error);
         if (error instanceof AppError) throw error;
         if (error instanceof z.ZodError) {
             throw new ValidationError("Invalid update data");

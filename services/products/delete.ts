@@ -26,7 +26,7 @@ export async function deleteProductService(
 
         // 3. Delete the product (Hard delete - matches current schema)
         await prisma.products.delete({
-            where: { id: validated.id },
+            where: { id: existingProduct.id },
         });
 
         // 4. Return success response
@@ -43,6 +43,6 @@ export async function deleteProductService(
         if (error instanceof z.ZodError) {
             throw new ValidationError("Invalid delete request");
         }
-        throw new DatabaseError("Failed to delete product", error as unknown as Record<string, unknown>);
+        throw new DatabaseError("Failed to delete product", {cause: error});
     }
 }
