@@ -13,11 +13,32 @@ datasource db {
   provider = "sqlite"
 }
 
+model AppConfig {
+  id Int @id @default(autoincrement())
+  isSetup Boolean @default(false)
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  password String
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  name          String?
+  password      String   // Hashed password
+  role          UserRole     @default(CUSTOMER)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations (future)
+  // orders        Order[]
+  // cartItems     CartItem[]
+
+  @@map("users")
 }
 
 enum ProductStatus {

@@ -1,0 +1,5 @@
+-- CreateTable
+CREATE TABLE "AppConfig" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "isSetup" BOOLEAN NOT NULL DEFAULT false
+);
