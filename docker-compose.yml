@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-ecom
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password   # ← required
+      POSTGRES_DB: e_commerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
